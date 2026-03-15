@@ -5,7 +5,9 @@ export default {
     extend: {
       fontFamily: {
         main: ["Cairo", "sans-serif"],
+        sofia: ['"Sofia Sans"', 'sans-serif'],
       },
+
     },
   },
   plugins: [],

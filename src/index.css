@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: "Sofia";
+    src: url("./assets/fonts/SofiaSans-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+.card{
+ transition: all 0.3s ease-in-out !important;
+}
+.card:hover {
+    padding-top: 13px;
+    padding-bottom: 13px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+   
+}
