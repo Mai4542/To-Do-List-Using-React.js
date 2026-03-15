@@ -9,6 +9,7 @@ import { useState } from "react";
 import { TodoContext } from './context/todoContext';
 import SnackBarr from './components/SnackBar';
 import { ToastContext } from './context/toastContext';
+import TodoProvider from './context/todoContext';
 const inittodos = [
   {
     id: uuidv4(),
@@ -45,15 +46,16 @@ function App() {
     
 <ThemeProvider theme={theme}>
 <CssBaseline />
+<TodoProvider>
  <ToastContext.Provider value={{showHideSnackbar}} >
   <div className='font-sofia' style={{ display:"flex",alignItems:"center",height:"100vh",backgroundColor: 'black' }} >
-  <TodoContext.Provider value={[todos, setTodos]}>
+  
     <ToDoList />
     <SnackBarr open={open} message={message}/>
-  </TodoContext.Provider>
+  
   </div>
  </ToastContext.Provider>
-    
+    </TodoProvider>
   </ThemeProvider>
  
   )

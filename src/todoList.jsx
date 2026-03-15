@@ -16,7 +16,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { TodoContext } from "./context/todoContext";
-import { useContext, useEffect, useMemo ,useReducer} from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -24,7 +24,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ToastContext } from "./context/toastContext";
-import reducer from "./reducers/TodoReducer";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -39,7 +39,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ToDoList() {
   let [header, setHeader] = useState("My Tasks");
-  let [todos2, setTodos] = useContext(TodoContext);
+  let {todos,dispatch} = useContext(TodoContext);
   const { showHideSnackbar } = useContext(ToastContext);
   let [filterTodos, setFilterTodos] = useState("all");
   const [deleteId, setDeleteId] = useState(null);
@@ -50,7 +50,7 @@ export default function ToDoList() {
   details: "",
   id: null
 });
-  let [todos,dispatch] = useReducer(reducer,[]);
+  
   let completedTodos = useMemo(() => {
     return todos.filter((item) => {
       console.log("completed");
@@ -65,21 +65,22 @@ export default function ToDoList() {
   }, [todos]);
   useEffect(() => {
     const storedTodos = localStorage.getItem("todos");
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos)) ?? [];
+      if (storedTodos) {
+      dispatch({ type: "initialize", payload: JSON.parse(storedTodos) });
     }
-  }, []);
+  }, [dispatch]);
   const handleAdd = () => {
     dispatch({ type: "added", payload: { Title: header } });
     setHeader("");
     showHideSnackbar("Task added successfully!");
   };
-  if (filterTodos === "completed") {
-    todos = completedTodos;
-  } else if (filterTodos === "notcompleted") {
-    todos = notcompletedTodos;
-  }
-  let todo = todos.map((item) => {
+let displayedTodos = todos;
+if (filterTodos === "completed") {
+    displayedTodos = completedTodos;
+} else if (filterTodos === "notcompleted") {
+    displayedTodos = notcompletedTodos;
+}
+  let todo = displayedTodos.map((item) => {
     return <ToDo
   key={item.id}
   todo={item}
@@ -101,10 +102,11 @@ export default function ToDoList() {
    const handleClose = () => {
     setOpen(false);
   };
-  function handleFilterChange(event) {
-    setFilterTodos(event.target.value);
-
+const handleFilterChange = (event, newValue) => {
+  if (newValue !== null) {
+    setFilterTodos(newValue);
   }
+};
   const handleConfirmDelete = () => {
  
  dispatch({type:"deleted",payload:{id:deleteId}});

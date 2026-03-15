@@ -1,6 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
 export default function reducer(state, action) {
   switch (action.type) {
+    case "initialize":
+      return action.payload; 
+      case "toggle":
+  return state.map((todo) =>
+    todo.id === action.payload.id
+      ? { ...todo, isCompleted: !todo.isCompleted }
+      : todo
+  );
     case "added": {
       const newTask = {
         id: uuidv4(),

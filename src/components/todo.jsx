@@ -14,17 +14,17 @@ import { TodoContext } from "../context/todoContext";
 import { ToastContext } from "../context/toastContext";
 import { useContext } from "react";
 export default function ToDo({ todo, onDelete ,onEdit}) {
-  let [todos, setTodos] = useContext(TodoContext);
+  let { todos, dispatch } = useContext(TodoContext);
   const { showHideSnackbar } = useContext(ToastContext);
 
   function handleDoneClick2(taskID) {
     const newTodos = todos.map((item) => {
-      if (item.id === taskID) {
-        item.isCompleted = !item.isCompleted;
-      }
-      return item;
-    });
-    setTodos(newTodos);
+  if (item.id === taskID) {
+    return { ...item, isCompleted: !item.isCompleted };
+  }
+  return item;
+});
+dispatch({ type: "toggle", payload: { id: taskID } });
     localStorage.setItem("todos", JSON.stringify(newTodos));
     showHideSnackbar(todo.isCompleted ? "Task marked as  completed!" : "Task marked as not completed!");
   }
